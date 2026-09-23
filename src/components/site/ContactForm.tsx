@@ -52,12 +52,11 @@ export function ContactForm() {
         description:
           "Your message has been sent. Our solutions engineering team will reply to you shortly.",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Contact form submission failed:", error);
 
       toast.error("Unable to transmit inquiry", {
-        description:
-          "Something went wrong while sending your message. Please try again.",
+        description: error?.message || "Something went wrong while sending your message. Please try again.",
       });
     } finally {
       setSending(false);
@@ -94,6 +93,7 @@ export function ContactForm() {
           name="message"
           required
           rows={5}
+          minLength={10}
           maxLength={5000}
           className="w-full resize-none rounded-2xl border border-input bg-white/5 px-4 py-3 text-sm outline-none backdrop-blur-xl transition-all placeholder:text-muted-foreground/60 focus:border-primary/60 focus:ring-2 focus:ring-ring/40"
           placeholder="Describe your infrastructure or security requirement"

@@ -321,7 +321,7 @@ export const achievements = [
     title: "MSME Certified Enterprise",
     subtitle: "सूक्ष्म, लघु एवं मध्यम उद्यम",
     body: "Officially certified enterprise under the Ministry of Micro, Small and Medium Enterprises, Government of India.",
-    logo: "",
+    logo: "/logos/msme.jpg",
     emoji: "🇮🇳",
   },
   {
@@ -329,7 +329,7 @@ export const achievements = [
     title: "#startupindia",
     subtitle: "#startupindia Recognized Venture",
     body: "Recognized technology startup by the Government of India under the flagship Startup India initiative.",
-    logo: "",
+    logo: "/logos/startupindia.jpg",
     emoji: "",
   },
   {
@@ -337,7 +337,7 @@ export const achievements = [
     title: "Confederation of Indian Industry (CII) Membership",
     subtitle: "Industry Association & Business Networking",
     body: "Membership with CII, India's premier industry association, fostering business growth, collaboration, innovation, and industry engagement.",
-    logo: "",
+    logo: "/logos/cii.jpg",
     emoji: "",
   },
 ];
@@ -362,21 +362,21 @@ export const clienteles = [
     sector: "Construction Consultancy",
     tag: "GLOBAL INFRASTRUCTURE",
     body: "International property and construction management consultancy.",
-    logo: "",
+    logo: "/logos/gleeds.jpg",
   },
   {
     name: "StatusNeo",
     sector: "MNC IT",
     tag: "ENTERPRISE IT CONSULTING",
     body: "Global digital transformation and enterprise IT consultancy.",
-    logo: "",
+    logo: "/logos/statusneo.jpg",
   },
   {
     name: "SIT PUNE",
     sector: "Academic Institution",
     tag: "EDUCATION & RESEARCH",
     body: "Premier engineering and technological research institute.",
-    logo: "",
+    logo: "/logos/sitpune.jpg",
   },
 ];
 

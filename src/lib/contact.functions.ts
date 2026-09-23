@@ -2,11 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 const enquirySchema = z.object({
-  name: z.string().min(2).max(120),
-  email: z.string().email().max(254),
-  company: z.string().max(160).optional(),
-  subject: z.string().max(180).optional(),
-  message: z.string().min(10).max(5000),
+  name: z.string().trim().min(2).max(120),
+  email: z.string().trim().email().max(254),
+  company: z.string().trim().max(160).optional(),
+  subject: z.string().trim().max(180).optional(),
+  message: z.string().trim().min(10).max(5000),
   website: z.string().max(200).optional(),
 });
 
@@ -23,31 +23,60 @@ export const sendEnquiry = createServerFn({ method: "POST" })
   .validator(enquirySchema)
   .handler(async ({ data }) => {
     // Honeypot spam protection.
-    // Real visitors leave this field empty.
+    // Real visitors should leave this field empty.
     if (data.website?.trim()) {
       return { success: true };
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    const toEmail =
-      process.env.ENQUIRY_TO_EMAIL || "info@kloudera.ai";
-    const fromEmail = process.env.ENQUIRY_FROM_EMAIL;
+    let apiKey = process.env.RESEND_API_KEY || process.env["RESEND_API_KEY"];
+    let toEmail = process.env.ENQUIRY_TO_EMAIL || process.env["ENQUIRY_TO_EMAIL"];
+    let fromEmail = process.env.ENQUIRY_FROM_EMAIL || process.env["ENQUIRY_FROM_EMAIL"];
+    let envDebug = "none";
+
+    if (!apiKey || !fromEmail) {
+      try {
+        const fs = await import("fs");
+        const path = await import("path");
+        const envPath = path.resolve(process.cwd(), ".env");
+        if (fs.existsSync(envPath)) {
+          const envContent = fs.readFileSync(envPath, "utf-8");
+          const env = envContent.split("\\n").reduce((acc, line) => {
+            const [k, ...v] = line.split("=");
+            if (k && v.length) acc[k.trim()] = v.join("=").trim();
+            return acc;
+          }, {} as Record<string, string>);
+          apiKey = apiKey || env.RESEND_API_KEY;
+          toEmail = toEmail || env.ENQUIRY_TO_EMAIL;
+          fromEmail = fromEmail || env.ENQUIRY_FROM_EMAIL;
+          envDebug = "loaded manually from " + envPath;
+        } else {
+          envDebug = "env file not found at " + envPath;
+        }
+      } catch (e) {
+        envDebug = "error: " + (e as Error).message;
+      }
+    }
+
+    toEmail = toEmail || "info@kloudera.ai";
 
     if (!apiKey) {
-      console.error("RESEND_API_KEY is not configured.");
-      throw new Error("Email service is not configured.");
+      throw new Error(`Email service is not configured. Debug: ${envDebug}`);
     }
 
     if (!fromEmail) {
-      console.error("ENQUIRY_FROM_EMAIL is not configured.");
-      throw new Error("Email sender is not configured.");
+      throw new Error(`Email sender is not configured. Debug: ${envDebug}`);
     }
 
     const safeName = escapeHtml(data.name);
     const safeEmail = escapeHtml(data.email);
     const safeCompany = escapeHtml(data.company || "Not provided");
-    const safeSubject = escapeHtml(data.subject || "Website enquiry");
-    const safeMessage = escapeHtml(data.message).replace(/\n/g, "<br />");
+    const safeSubject = escapeHtml(
+      data.subject || "Website enquiry",
+    );
+    const safeMessage = escapeHtml(data.message).replace(
+      /\n/g,
+      "<br />",
+    );
 
     const emailSubject = data.subject?.trim()
       ? `Website Enquiry: ${data.subject.trim()}`
@@ -59,6 +88,7 @@ export const sendEnquiry = createServerFn({ method: "POST" })
           <h1 style="margin: 0; font-size: 24px;">
             New Website Enquiry
           </h1>
+
           <p style="margin: 8px 0 0; color: #6b7280;">
             Submitted through the KloudEra website contact form.
           </p>
