@@ -15,12 +15,12 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Reach the KloudEra solutions engineering team in Pune and Bengaluru to evaluate your security posture or configure enterprise hardware rigs.",
+          "Reach the KloudEra solutions engineering team in Bengaluru and Pune to evaluate your security posture or configure enterprise hardware rigs.",
       },
       { property: "og:title", content: "Contact KloudEra Technologies" },
       {
         property: "og:description",
-        content: "Pune HQ and Bengaluru branch — info@kloudera.ai",
+        content: "Bengaluru HQ and Pune branch — info@kloudera.ai",
       },
     ],
   }),

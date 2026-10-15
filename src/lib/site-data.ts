@@ -11,17 +11,17 @@ export const company = {
 
 export const offices = [
   {
-    city: "Pune Office",
+    city: "Bengaluru Office",
     kind: "HQ",
     address:
-      "412, Tower B City Vista DownTown, Kharadi Pune - 411014 | Maharashtra | India",
+      "35/36, Shri Durga Kurupa, Thanisandra, Raechanhalli, Bengaluru, Karnataka - 560045",
     hours: "Monday - Friday 10am - 6pm",
   },
   {
-    city: "Bengaluru Office",
+    city: "Pune Office",
     kind: "BRANCH",
     address:
-      "35/36, Shri Durga Kurupa, Thanisandra, Raechanhalli, Bengaluru, Karnataka - 560045",
+      "412, Tower B City Vista DownTown, Kharadi Pune - 411014 | Maharashtra | India",
     hours: "Monday - Friday 10am - 6pm",
   },
 ];
