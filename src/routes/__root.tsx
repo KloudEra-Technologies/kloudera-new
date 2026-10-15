@@ -167,11 +167,12 @@ function RootComponent() {
         <GradualBlur
           target="page"
           position="bottom"
-          height="7rem"
-          strength={2}
-          divCount={8}
+          height="2.5rem"
+          strength={1}
+          divCount={6}
           curve="bezier"
-          opacity={0.9}
+          opacity={0.6}
+          zIndex={20}
         />
         <Toaster />
         <KlouderaChatbot />

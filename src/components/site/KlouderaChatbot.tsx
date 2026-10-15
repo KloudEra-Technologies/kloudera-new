@@ -166,7 +166,7 @@ export function KlouderaChatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end">
       {/* Chat Window */}
       {isOpen && (
         <div className="glass mb-3 flex h-[580px] max-h-[85vh] w-[92vw] max-w-[430px] flex-col overflow-hidden rounded-[2rem] border border-border/80 shadow-[0_20px_50px_rgba(0,0,0,0.35)] backdrop-blur-2xl transition-all duration-300 animate-in fade-in zoom-in-95">
