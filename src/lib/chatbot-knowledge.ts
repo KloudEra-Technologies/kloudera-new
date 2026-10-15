@@ -1,4 +1,18 @@
-import { company, offices, socialLinks, team, achievements, clienteles, complianceStandards, jobs, hiringSteps, products, serviceGroups, zeroTrustPrinciples, benefits } from "./site-data";
+import {
+  company,
+  offices,
+  socialLinks,
+  team,
+  achievements,
+  clienteles,
+  complianceStandards,
+  jobs,
+  hiringSteps,
+  products,
+  serviceGroups,
+  zeroTrustPrinciples,
+  benefits,
+} from "./site-data";
 
 export interface ChatMessage {
   id: string;
@@ -11,11 +25,11 @@ export interface ChatMessage {
 
 export const initialSuggestions = [
   "💡 What can you answer me?",
+  "⭐ What is KloudEra good at?",
   "🛡️ 24/7 SOC & Cyber Security",
   "⚡ Custom GPU & AI Compute Rigs",
   "💻 Proprietary Software Products",
   "📍 Office Locations & Timings",
-  "👥 Leadership & Team",
 ];
 
 export interface KnowledgeTopic {
@@ -28,8 +42,58 @@ export interface KnowledgeTopic {
   suggestions?: string[];
 }
 
+// Common conversational words that shouldn't inflate keyword scores
+const STOP_WORDS = new Set([
+  "a", "an", "the", "and", "or", "but", "is", "are", "was", "were", "be", "been", "being",
+  "in", "on", "at", "to", "for", "from", "with", "by", "about", "into", "through",
+  "of", "that", "this", "these", "those", "it", "its", "you", "your", "me", "my",
+  "we", "our", "us", "he", "she", "they", "them", "what", "which", "who", "whom",
+  "tell", "can", "could", "would", "should", "do", "does", "did", "something", "ok", "okay",
+  "please", "just", "get", "got", "give", "know", "how", "why", "when", "where", "there",
+]);
+
 export const knowledgeBase: KnowledgeTopic[] = [
-  // 1. Bot Capabilities & Menu
+  // 1. Core Strengths & "What is KloudEra good at / specialize in?"
+  {
+    id: "strengths",
+    name: "Core Strengths & Specializations",
+    keywords: [
+      "good at",
+      "what is kloudera good at",
+      "what are you good at",
+      "best at",
+      "what are your strengths",
+      "strengths",
+      "specialization",
+      "specialise",
+      "speciality",
+      "specialities",
+      "what do you specialize in",
+      "core competencies",
+      "why kloudera",
+      "expertise",
+      "what are you best at",
+      "key offerings",
+    ],
+    patterns: [
+      /(?:good at|good in|best at|specializ|strength|competenc|expertise)/i,
+      /(?:why choose|why kloudera)/i,
+    ],
+    reply: `**KloudEra Technologies Core Strengths & Specializations:**\n\nKloudEra is particularly distinguished in **4 mission-critical enterprise engineering areas**:\n\n🛡️ **1. Elite Cyber Defense & 24/7 SOC Telemetry:**\n• Continuous network surveillance detecting and deflecting zero-day intrusions before they compromise databases.\n• In-depth VAPT (ethical hacking) across web apps, APIs, and cloud perimeters.\n• On-demand executive vCISO / vDPO compliance and governance advisory.\n\n⚡ **2. Enterprise AI Compute & Custom GPU Clusters:**\n• Engineering high-density GPU rigs (NVIDIA HGX, H100, L40S, RTX 6000 Ada) with thermal and electrical optimization.\n• Fine-tuning custom private Gen-AI LLM pipelines on your private data estate with zero leakage.\n• Full MLSecOps model auditing and secure containerized inference.\n\n☁️ **3. Multi-Cloud Modernization & FinOps Cost Control:**\n• Direct Tier-1 Microsoft Solutions Partner (Entra ID, M365, Defender).\n• Zero-downtime migration across AWS, Azure, and Google Cloud with automated rightsizing slashing cloud bills by up to 35%.\n\n🖥️ **4. Next-Gen Datacenter Hardware:**\n• Turnkey enterprise servers, NVMe SAN/NAS storage, and HCI procurement with lifecycle support.\n\nWhich of these areas would you like to explore for your enterprise?`,
+    links: [
+      { label: "Explore Services", href: "/services" },
+      { label: "View Products", href: "/products" },
+      { label: "Book a Systems Consultation", href: "/contact" },
+    ],
+    suggestions: [
+      "🛡️ 24/7 SOC Defense",
+      "⚡ Custom AI GPU Rigs",
+      "☁️ Multi-Cloud Migration",
+      "💻 Software Products",
+    ],
+  },
+
+  // 2. Bot Capabilities & Menu
   {
     id: "capabilities",
     name: "Assistant Capabilities",
@@ -37,7 +101,9 @@ export const knowledgeBase: KnowledgeTopic[] = [
       "what things can you answer me",
       "what can you answer me",
       "what can you answer",
+      "what things can you answer",
       "what can you do",
+      "what do you do",
       "what questions can i ask",
       "what can i ask you",
       "what can i ask",
@@ -60,22 +126,22 @@ export const knowledgeBase: KnowledgeTopic[] = [
       /capabilities|features|topics|menu/i,
       /can you answer/i,
     ],
-    reply: `I am the **KloudEra AI Assistant**, trained with **all publicly available knowledge** about KloudEra Technologies.\n\nHere is everything you can ask me about:\n\n🛡️ **1. Managed Cybersecurity & SOC Services:**\n• 24/7 Security Operations Center (SOC) telemetry\n• VAPT (Penetration Testing) & Red Teaming\n• vCISO & vDPO executive leadership\n• Zero-Trust principles & Cloud GRC\n\n⚡ **2. AI CoE & GPU Compute Rigs:**\n• NVIDIA HGX, H100, L40S, RTX Ada GPU clusters\n• Gen-AI & custom private LLM fine-tuning pipelines\n• MLSecOps automated model auditing & inference\n\n💻 **3. Proprietary Software Products:**\n• Remote Desk (Live virtual desktop)\n• Kloudera Meet Scheduler, Data Recovery Tool, Remote Device Controller\n\n☁️ **4. Cloud, Automation & Datacenter Hardware:**\n• AWS, Azure, GCP multi-cloud migrations & FinOps\n• RPA process automation, IaC, CI/CD\n• Tier-1 OEM servers, NVMe SAN/NAS storage, HCI\n\n📍 **5. Offices, Team & Contact:**\n• **Bengaluru Office (HQ)** & **Pune Office (BRANCH)** addresses and hours\n• Leadership team (Ratnesh Pandey, Deepa, Utkarsh, Abhay, Manan, Mrunal)\n• Direct phone numbers, email, and social media links\n\n🏆 **6. Accreditations, Clients & Careers:**\n• MSME certified, Startup India, CII Member, ISO 27001, SOC 2 Type II\n• Clients: IndiaCapital, Gleeds, StatusNeo, SIT Pune\n• Open job roles & 4-step hiring process\n\nTap any chip below or ask your question!`,
+    reply: `I am the **KloudEra AI Assistant**, trained with **all publicly available knowledge** about KloudEra Technologies.\n\nHere is everything you can ask me about:\n\n⭐ **1. Core Strengths & Expertise:**\n• What KloudEra is best at and why enterprise clients choose us\n\n🛡️ **2. Managed Cybersecurity & 24/7 SOC:**\n• 24/7 Security Operations Center (SOC) telemetry & intrusion defense\n• VAPT (Penetration Testing) & Red Teaming simulations\n• vCISO & vDPO executive leadership and Zero-Trust architecture\n\n⚡ **3. AI CoE & GPU Compute Rigs:**\n• NVIDIA HGX, H100, L40S, RTX Ada GPU clusters\n• Gen-AI & custom private LLM fine-tuning pipelines\n• MLSecOps automated model auditing & inference\n\n💻 **4. Proprietary Software Products:**\n• Remote Desk (Live virtual desktop)\n• Kloudera Meet Scheduler, Data Recovery Tool, Remote Device Controller\n\n☁️ **5. Cloud, Automation & Datacenter Hardware:**\n• AWS, Azure, GCP multi-cloud migrations & FinOps cost optimization\n• RPA process automation, IaC, CI/CD\n• Tier-1 OEM servers, NVMe SAN/NAS storage, HCI\n\n📍 **6. Offices, Leadership & Contact:**\n• **Bengaluru Office (HQ)** & **Pune Office (BRANCH)** addresses and hours\n• Leadership team (Ratnesh Pandey, Deepa, Utkarsh, Abhay, Manan, Mrunal)\n• Direct phone numbers, email, and social media links\n\n🏆 **7. Accreditations, Clients & Careers:**\n• MSME certified, Startup India, CII Member, ISO 27001, SOC 2 Type II\n• Clients: IndiaCapital, Gleeds, StatusNeo, SIT Pune\n• Open job roles & 4-step hiring process\n\nTap any chip below or ask your question!`,
     links: [
       { label: "Book a Consultation", href: "/contact" },
       { label: "Explore Services", href: "/services" },
       { label: "View Products", href: "/products" },
     ],
     suggestions: [
+      "⭐ What is KloudEra good at?",
       "🛡️ Cyber Security SOC",
       "💻 Software Products",
       "⚡ AI GPU Rigs",
       "📍 Office Locations",
-      "👥 Leadership Team",
     ],
   },
 
-  // 2. Company Overview, Mission & Vision
+  // 3. Company Overview, Mission & Vision
   {
     id: "about",
     name: "About KloudEra Technologies",
@@ -93,7 +159,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
       "why choose us",
       "benefits",
     ],
-    patterns: [/who is kloudera/i, /about (?:kloudera|company)/i, /what is kloudera/i, /mission|vision/i, /why choose/i],
+    patterns: [/who is kloudera/i, /about (?:kloudera|company)/i, /what is kloudera/i, /mission|vision/i],
     reply: `**${company.name}** is an enterprise technology firm architecting zero-trust digital enterprises across cybersecurity, cloud infrastructure, AI compute clusters, and datacenter hardware.\n\n**Tagline:** "${company.tagline}"\n\n**Mission Statement:**\n"${company.intro}"\n\n**Why Choose KloudEra?**\n• **${benefits[0]?.title}:** ${benefits[0]?.body}\n• **${benefits[1]?.title}:** ${benefits[1]?.body}\n• **${benefits[2]?.title}:** ${benefits[2]?.body}\n• **${benefits[3]?.title}:** ${benefits[3]?.body}\n\n**Headquarters:** Bengaluru, Karnataka (HQ)\n**Branch:** Pune, Maharashtra`,
     links: [
       { label: "Read Our Story", href: "/about" },
@@ -102,7 +168,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["👥 Leadership Team", "🛡️ Security Services", "📍 Office Locations"],
   },
 
-  // 3. Leadership & Team
+  // 4. Leadership & Team
   {
     id: "team",
     name: "Executive Leadership & Team",
@@ -135,7 +201,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["💼 Work with Us", "📍 Office Locations", "🛡️ Cyber Security SOC"],
   },
 
-  // 4. Offices & Operating Locations
+  // 5. Offices & Operating Locations
   {
     id: "offices",
     name: "Office Locations & Operating Hours",
@@ -168,7 +234,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["📞 Phone & Email Contact", "👥 Leadership Team", "🛡️ Security Services"],
   },
 
-  // 5. Contact Channels & Consultation Booking
+  // 6. Contact Channels & Consultation Booking
   {
     id: "contact",
     name: "Contact Channels & Consultation",
@@ -203,7 +269,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["📍 Office Locations", "⚡ Custom AI Rigs", "🛡️ VAPT & SOC Services"],
   },
 
-  // 6. Social Media
+  // 7. Social Media
   {
     id: "social",
     name: "Official Social Media Channels",
@@ -229,7 +295,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["📰 About KloudEra", "💼 Open Careers", "🛡️ Security Services"],
   },
 
-  // 7. Proprietary Software Products
+  // 8. Proprietary Software Products
   {
     id: "products",
     name: "Kloudera Proprietary Software Suite",
@@ -255,7 +321,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["⚡ AI Hardware Rigs", "🛡️ SOC Services", "📞 Inquire Software Access"],
   },
 
-  // 8. Managed Cybersecurity & 24/7 SOC
+  // 9. Managed Cybersecurity & 24/7 SOC
   {
     id: "cybersecurity",
     name: "Managed Cybersecurity & 24/7 SOC",
@@ -298,7 +364,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["⚡ Custom AI Rigs", "📜 Certifications", "☁️ Multi-Cloud Services"],
   },
 
-  // 9. Zero-Trust Command Principles
+  // 10. Zero-Trust Command Principles
   {
     id: "zero_trust",
     name: "Zero-Trust Command Principles",
@@ -321,7 +387,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["🛡️ 24/7 SOC Services", "📜 ISO & Compliance", "📞 Schedule Audit"],
   },
 
-  // 10. AI CoE & GPU Compute Rigs
+  // 11. AI CoE & GPU Compute Rigs
   {
     id: "ai_compute",
     name: "AI CoE & Custom GPU Rigs",
@@ -359,7 +425,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["🖥️ Datacenter Servers", "🛡️ SOC Threat Protection", "🤝 Strategic Partners"],
   },
 
-  // 11. Cloud & Managed Cloud Services
+  // 12. Cloud & Managed Cloud Services
   {
     id: "cloud",
     name: "Managed Cloud & FinOps Services",
@@ -390,7 +456,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["🛡️ 24/7 SOC Surveillance", "⚡ AI Infrastructure", "🤝 Cloud Partners"],
   },
 
-  // 12. Microsoft Cloud Suite & Tier-1 Partnership
+  // 13. Microsoft Cloud Suite & Tier-1 Partnership
   {
     id: "microsoft",
     name: "Microsoft Cloud Suite & Tier-1 Partnership",
@@ -415,7 +481,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["☁️ Cloud Services", "🛡️ Cybersecurity", "🤝 All Partners"],
   },
 
-  // 13. Automation & Digital Technology Services
+  // 14. Automation & Digital Technology Services
   {
     id: "automation",
     name: "Automation & Digital Technology Services",
@@ -442,7 +508,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["☁️ Managed Cloud", "🛡️ SOC Services", "⚡ AI LLM Rigs"],
   },
 
-  // 14. Next-Gen Hardware & Datacenter Solutions
+  // 15. Next-Gen Hardware & Datacenter Solutions
   {
     id: "hardware",
     name: "Datacenter Hardware & Lifecycle Management",
@@ -476,7 +542,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["⚡ GPU AI Rigs", "🤝 Partner Network", "📞 Contact Sales"],
   },
 
-  // 15. Strategic Partners
+  // 16. Strategic Partners
   {
     id: "partners",
     name: "Strategic Partners Ecosystem",
@@ -506,7 +572,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["🛡️ Security Stack", "⚡ AI Hardware Options", "📍 Office Addresses"],
   },
 
-  // 16. Enterprise Clientele & Case Studies
+  // 17. Enterprise Clientele & Case Studies
   {
     id: "clients",
     name: "Enterprise Clientele & Case Studies",
@@ -537,7 +603,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["🏆 Government Recognitions", "🛡️ SOC Services", "📞 Book Consultation"],
   },
 
-  // 17. Government Recognitions & Achievements
+  // 18. Government Recognitions & Achievements
   {
     id: "achievements",
     name: "Accreditations & Government Recognitions",
@@ -564,7 +630,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["📜 Compliance Standards", "📰 About KloudEra", "📍 Office Locations"],
   },
 
-  // 18. Certifications & Compliance Standards
+  // 19. Certifications & Compliance Standards
   {
     id: "certifications",
     name: "Certifications & Compliance Standards",
@@ -594,7 +660,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["🛡️ VAPT Audits", "📍 Office Locations", "📰 About KloudEra"],
   },
 
-  // 19. Careers, Job Openings & Hiring Process
+  // 20. Careers, Job Openings & Hiring Process
   {
     id: "careers",
     name: "Careers, Open Positions & Hiring",
@@ -624,7 +690,7 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["👥 Leadership Team", "📍 Office Addresses", "📰 Company Culture"],
   },
 
-  // 20. Pricing & Commercials
+  // 21. Pricing & Commercials
   {
     id: "pricing",
     name: "Pricing & Quotation",
@@ -651,28 +717,28 @@ export const knowledgeBase: KnowledgeTopic[] = [
     suggestions: ["📞 Phone Lines", "⚡ AI Hardware Options", "🛡️ SOC Services"],
   },
 
-  // 21. Greetings
+  // 22. Greetings
   {
     id: "greetings",
     name: "Greetings",
-    keywords: ["hi", "hello", "hey", "good morning", "good evening", "good afternoon", "greetings", "namaste", "sup"],
-    patterns: [/^(?:hi|hello|hey|namaste|greetings)(?:\s|$)/i],
+    keywords: ["hi", "hello", "hey", "namaste", "greetings", "good morning", "good evening", "good afternoon"],
+    patterns: [/^(?:hi|hello|hey|namaste|greetings|good (?:morning|evening|afternoon))[\s!.,?]*$/i],
     reply: `Hello! 👋 Welcome to **KloudEra Technologies**.\n\nI am the KloudEra AI Assistant, trained on all publicly available information across our website (Cybersecurity, AI Compute Rigs, Cloud, Products, Leadership, Offices, and Accreditations).\n\nHow can I help you architect or secure your digital enterprise today?`,
     suggestions: [
       "💡 What can you answer me?",
+      "⭐ What is KloudEra good at?",
       "🛡️ What cyber security services do you offer?",
       "💻 What software products do you have?",
       "⚡ Can you configure custom AI GPU rigs?",
-      "📍 Where are your offices located?",
     ],
   },
 
-  // 22. Thanks & Appreciation
+  // 23. Thanks & Appreciation
   {
     id: "thanks",
     name: "Thanks & Feedback",
     keywords: ["thanks", "thank you", "awesome", "great", "helpful", "perfect", "good job"],
-    patterns: [/thank/i, /awesome|great|perfect/i],
+    patterns: [/^(?:thanks|thank you|awesome|great|perfect|good job)[\s!.,?]*$/i],
     reply: `You're very welcome! If you have any more questions about our services, software products, hardware rigs, or need to schedule an enterprise consultation, I am right here.\n\nHave a productive and secure day!`,
     suggestions: ["📞 Contact Solutions Team", "🛡️ Explore Services", "💻 View Products"],
   },
@@ -695,8 +761,14 @@ export function getChatbotResponse(userQuery: string): {
   // Clean query: strip common punctuation
   const cleanQuery = raw.replace(/[?!.,;:()"'`]/g, " ").replace(/\s+/g, " ").trim();
 
-  // Priority 1: Pattern-based direct intent match
+  // Guard: If the query has substantive question words, do NOT treat it as a pure greeting!
+  const hasSubstantiveIntent = /(?:good at|good in|tell me|what|who|where|how|why|can you|price|cost|rig|soc|gpu|office|product|service|strength|specializ|contact|phone|email|team|lead|work|ceo)/i.test(cleanQuery);
+
+  // Priority 1: Pattern-based direct intent match (skip greetings if substantive intent exists)
   for (const topic of knowledgeBase) {
+    if (topic.id === "greetings" && hasSubstantiveIntent) {
+      continue;
+    }
     if (topic.patterns) {
       for (const pattern of topic.patterns) {
         if (pattern.test(cleanQuery)) {
@@ -710,22 +782,37 @@ export function getChatbotResponse(userQuery: string): {
     }
   }
 
-  // Priority 2: Keyword scoring with word boundaries
+  // Priority 2: Keyword scoring with word boundaries & stop words filter
+  const queryWords = new Set(cleanQuery.split(/\s+/).filter((w) => w.length > 2 && !STOP_WORDS.has(w)));
+
   let bestMatch: KnowledgeTopic | null = null;
   let highestScore = 0;
 
   for (const topic of knowledgeBase) {
+    // Skip greetings topic in keyword scoring if query has substantive intent
+    if (topic.id === "greetings" && hasSubstantiveIntent) {
+      continue;
+    }
+
     let score = 0;
+
     for (const kw of topic.keywords) {
-      if (cleanQuery === kw) {
-        score += 25;
-      } else if (cleanQuery.includes(kw)) {
-        score += 10 + kw.split(" ").length * 3;
+      const cleanKw = kw.toLowerCase().trim();
+
+      if (cleanQuery === cleanKw) {
+        score += 30;
+      } else if (cleanQuery.includes(cleanKw)) {
+        score += 15 + cleanKw.split(" ").length * 4;
       } else {
-        const words = kw.split(" ");
-        const matchedWords = words.filter((w) => w.length > 2 && cleanQuery.includes(w));
-        if (matchedWords.length > 0) {
-          score += matchedWords.length * 2.5;
+        const kwWords = cleanKw.split(/\s+/).filter((w) => w.length > 2 && !STOP_WORDS.has(w));
+        let matchedCount = 0;
+        for (const kwWord of kwWords) {
+          if (queryWords.has(kwWord)) {
+            matchedCount++;
+          }
+        }
+        if (matchedCount > 0) {
+          score += matchedCount * 4;
         }
       }
     }
@@ -737,7 +824,7 @@ export function getChatbotResponse(userQuery: string): {
   }
 
   // Threshold check
-  if (bestMatch && highestScore >= 4) {
+  if (bestMatch && highestScore >= 5) {
     return {
       reply: bestMatch.reply,
       links: bestMatch.links,
@@ -747,19 +834,19 @@ export function getChatbotResponse(userQuery: string): {
 
   // Dynamic Helpful Fallback with directory of all knowledge
   return {
-    reply: `I am trained on all publicly available information across **KloudEra Technologies**! Here are the core topics I can answer:\n\n• **🛡️ Cybersecurity & 24/7 SOC:** Threat deflection, VAPT, vCISO/vDPO leadership, Zero-Trust\n• **⚡ AI & Custom GPU Rigs:** NVIDIA HGX clusters, custom LLMs, MLSecOps\n• **💻 Software Products:** Remote Desk, Meet Scheduler, Data Recovery Tool, Remote Device Controller\n• **☁️ Cloud & Automation:** AWS, Azure, GCP, FinOps cost control, RPA, IaC\n• **👥 Leadership & Team:** Ratnesh Pandey (CEO), Deepa (CHRO), Utkarsh, Abhay, Manan, Mrunal\n• **📍 Office Locations:** Bengaluru HQ & Pune Branch addresses and timings\n• **🏆 Accreditations & Clients:** MSME, Startup India, CII, ISO 27001, SOC 2, IndiaCapital, Gleeds\n• **💼 Careers:** Open roles (Security Auditor, AI Pipeline Lead, Solutions Architect)\n\nWhat would you like to know more about?`,
+    reply: `I am trained on all publicly available information across **KloudEra Technologies**! Here are the core topics I can answer:\n\n• **⭐ Core Strengths:** What KloudEra is best at and why enterprise clients choose us\n• **🛡️ Cybersecurity & 24/7 SOC:** Threat deflection, VAPT, vCISO/vDPO leadership, Zero-Trust\n• **⚡ AI & Custom GPU Rigs:** NVIDIA HGX clusters, custom LLMs, MLSecOps\n• **💻 Software Products:** Remote Desk, Meet Scheduler, Data Recovery Tool, Remote Device Controller\n• **☁️ Cloud & Automation:** AWS, Azure, GCP, FinOps cost control, RPA, IaC\n• **👥 Leadership & Team:** Ratnesh Pandey (CEO), Deepa (CHRO), Utkarsh, Abhay, Manan, Mrunal\n• **📍 Office Locations:** Bengaluru HQ & Pune Branch addresses and timings\n• **🏆 Accreditations & Clients:** MSME, Startup India, CII, ISO 27001, SOC 2, IndiaCapital, Gleeds\n• **💼 Careers:** Open roles (Security Auditor, AI Pipeline Lead, Solutions Architect)\n\nWhat would you like to explore?`,
     links: [
       { label: "Book a Consultation", href: "/contact" },
       { label: "Explore Services", href: "/services" },
       { label: "View Products", href: "/products" },
     ],
     suggestions: [
-      "💡 What can you answer me?",
+      "⭐ What is KloudEra good at?",
+      "💡 What things can you answer me?",
       "🛡️ 24/7 SOC & Security",
       "💻 Software Products",
       "⚡ AI Compute & GPU Rigs",
       "📍 Office Locations & Timings",
-      "👥 Leadership Team",
     ],
   };
 }
