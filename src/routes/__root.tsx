@@ -16,6 +16,7 @@ import { Footer } from "../components/site/Footer";
 import { Toaster } from "../components/ui/sonner";
 import Ferrofluid from "../components/ui/Ferrofluid";
 import GradualBlur from "../components/ui/GradualBlur";
+import { KlouderaChatbot } from "../components/site/KlouderaChatbot";
 
 function NotFoundComponent() {
   return (
@@ -173,6 +174,7 @@ function RootComponent() {
           opacity={0.9}
         />
         <Toaster />
+        <KlouderaChatbot />
       </div>
     </QueryClientProvider>
   );
