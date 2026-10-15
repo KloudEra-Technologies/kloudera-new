@@ -5,7 +5,8 @@ import { Section } from "@/components/site/Section";
 import { Reveal } from "@/components/site/Reveal";
 import { GlassCard } from "@/components/site/GlassCard";
 import { ContactForm } from "@/components/site/ContactForm";
-import { company, offices } from "@/lib/site-data";
+import { SocialIcon } from "@/components/site/SocialIcon";
+import { company, offices, socialLinks } from "@/lib/site-data";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -78,6 +79,34 @@ function Contact() {
                 </GlassCard>
               </Reveal>
             ))}
+
+            <Reveal delay={0.24}>
+              <GlassCard className="h-full">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg font-semibold">Connect & Follow</h2>
+                  <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-[0.2em] text-muted-foreground">
+                    SOCIAL
+                  </span>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Follow KloudEra for cyber defense intelligence, GPU cluster engineering updates, and company announcements.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2.5">
+                  {socialLinks.map((s) => (
+                    <a
+                      key={s.name}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-background/50 px-3.5 py-2 text-xs font-medium text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+                    >
+                      <SocialIcon name={s.name} className="size-4" />
+                      <span>{s.name}</span>
+                    </a>
+                  ))}
+                </div>
+              </GlassCard>
+            </Reveal>
           </div>
         </div>
       </Section>

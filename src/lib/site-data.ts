@@ -26,6 +26,24 @@ export const offices = [
   },
 ];
 
+export const socialLinks = [
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/company/104839162/",
+    handle: "KloudEra Technologies",
+  },
+  {
+    name: "YouTube",
+    href: "https://www.youtube.com/@KloudEraTechnologies-b3z",
+    handle: "@KloudEraTechnologies",
+  },
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/klouderatech/",
+    handle: "@klouderatech",
+  },
+] as const;
+
 export const navLinks = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
